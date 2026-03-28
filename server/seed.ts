@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
 import { resolve } from "path";
-import { sql } from "./db";
+import { sql } from "./db.js";
 
 async function seed() {
   const schemaPath = resolve(import.meta.dirname, "schema.sql");

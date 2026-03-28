@@ -1,7 +1,7 @@
 import { Router, Request, Response } from "express";
 import bcrypt from "bcryptjs";
-import { sql } from "../db";
-import { authenticate, signToken } from "../middleware/auth";
+import { sql } from "../db.js";
+import { authenticate, signToken } from "../middleware/auth.js";
 
 const router = Router();
 
@@ -78,7 +78,7 @@ router.post("/login", async (req: Request, res: Response) => {
 
 // GET /api/auth/me
 router.get("/me", authenticate, (req: Request, res: Response) => {
-  res.json(req.user);
+  res.json((req as any).user);
 });
 
 export default router;

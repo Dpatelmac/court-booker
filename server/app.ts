@@ -1,8 +1,8 @@
 import express from "express";
 import "dotenv/config";
-import authRoutes from "./routes/auth";
-import courtRoutes from "./routes/courts";
-import bookingRoutes from "./routes/bookings";
+import authRoutes from "./routes/auth.js";
+import courtRoutes from "./routes/courts.js";
+import bookingRoutes from "./routes/bookings.js";
 
 const app = express();
 app.use(express.json());

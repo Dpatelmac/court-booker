@@ -1,6 +1,6 @@
 import { Router, Request, Response } from "express";
-import { sql } from "../db";
-import { authenticate } from "../middleware/auth";
+import { sql } from "../db.js";
+import { authenticate } from "../middleware/auth.js";
 
 const router = Router();
 
@@ -43,7 +43,7 @@ router.get("/mine", async (req: Request, res: Response) => {
              u.display_name AS "playerName"
       FROM bookings b
       JOIN users u ON b.user_id = u.id
-      WHERE b.user_id = ${req.user!.id}
+      WHERE b.user_id = ${(req as any).user.id}
       ORDER BY b.date, b.start_hour
     `;
 
@@ -66,11 +66,11 @@ router.post("/", async (req: Request, res: Response) => {
 
     const rows = await sql`
       INSERT INTO bookings (court_id, date, start_hour, user_id)
-      VALUES (${courtId}, ${date}, ${startHour}, ${req.user!.id})
+      VALUES (${courtId}, ${date}, ${startHour}, ${(req as any).user.id})
       RETURNING id, court_id AS "courtId", date, start_hour AS "startHour"
     `;
 
-    const booking = { ...rows[0], playerName: req.user!.displayName };
+    const booking = { ...rows[0], playerName: (req as any).user.displayName };
     res.status(201).json(booking);
   } catch (err: any) {
     if (err.code === "23505") {
@@ -86,7 +86,7 @@ router.post("/", async (req: Request, res: Response) => {
 router.delete("/:id", async (req: Request, res: Response) => {
   try {
     const rows = await sql`
-      DELETE FROM bookings WHERE id = ${req.params.id} AND user_id = ${req.user!.id}
+      DELETE FROM bookings WHERE id = ${req.params.id} AND user_id = ${(req as any).user.id}
       RETURNING id
     `;
 
